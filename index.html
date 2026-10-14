@@ -1,0 +1,689 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Midnight Birthday Surprise ❤️</title>
+
+<style>
+*{box-sizing:border-box}
+:root{--red:#e60045;--pink:#ffb5ca;--dark:#8d123b}
+
+body{
+ margin:0;min-height:100vh;text-align:center;
+ font-family:Georgia,serif;color:var(--dark);
+ background:linear-gradient(135deg,#fff5f8,#ffd5e2,#fff0f5);
+ overflow-x:hidden
+}
+.page{
+ display:none;min-height:100vh;padding:35px 15px 100px;
+ align-items:center;justify-content:center;position:relative
+}
+.page.active{display:flex;animation:appear .7s ease}
+.wrap{width:min(700px,100%);margin:auto}
+
+@keyframes appear{
+ from{opacity:0;transform:translateY(20px)}
+ to{opacity:1;transform:none}
+}
+
+h1{font-size:clamp(36px,8vw,65px);margin:10px 0;color:var(--dark)}
+h2{font-size:clamp(29px,6vw,45px)}
+p{font-size:18px;line-height:1.7}
+.script{font-style:italic;color:#d22660}
+.eyebrow{
+ font:12px Arial;letter-spacing:4px;
+ text-transform:uppercase;color:#c34a70
+}
+.card{
+ background:#ffffffc9;border:1px solid #ffc2d2;
+ border-radius:28px;padding:25px;
+ box-shadow:0 18px 55px #a3264b18
+}
+.heart{
+ font-size:110px;display:inline-block;line-height:1.3;
+ filter:drop-shadow(0 8px 15px #f0064f50);
+ animation:beat 1.2s infinite
+}
+@keyframes beat{
+ 0%,100%{transform:scale(1)}
+ 50%{transform:scale(1.12)}
+}
+
+.btn{
+ border:0;border-radius:30px;padding:14px 22px;margin:8px 4px;
+ color:white;background:linear-gradient(135deg,#ff477b,#c90043);
+ font-weight:bold;cursor:pointer;
+ box-shadow:0 7px 18px #df245044;transition:transform .2s
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:disabled{opacity:.7;cursor:wait}
+
+input{
+ display:block;width:min(330px,100%);padding:14px;margin:12px auto;
+ border:1px solid #f5a4bd;border-radius:12px;
+ font-size:16px;color:#741638
+}
+
+.nav{
+ position:fixed;z-index:9;bottom:0;left:0;right:0;
+ background:#fffafde8;padding:10px 4px;
+ display:flex;justify-content:center;gap:5px;flex-wrap:wrap;
+ border-top:1px solid #ffc7d5
+}
+.nav button{
+ border:1px solid #f5b6c9;background:white;border-radius:25px;
+ padding:9px 11px;color:#9a2448;font:bold 11px Arial;cursor:pointer
+}
+.nav button.active{background:#d70c4a;color:white}
+
+.battery{
+ width:115px;height:195px;margin:35px auto 18px;
+ border:5px solid #a90e3c;border-radius:16px;padding:5px;
+ position:relative;background:white
+}
+.battery:before{
+ content:"";position:absolute;width:40px;height:10px;
+ left:33px;top:-15px;background:#a90e3c;border-radius:5px 5px 0 0
+}
+.fill{
+ position:absolute;bottom:5px;left:5px;right:5px;height:0;
+ border-radius:8px;
+ background:linear-gradient(to top,#c5003d,#f20a50,#ff7195);
+ transition:height .08s;display:flex;
+ align-items:center;justify-content:center;
+ color:white;font-size:27px
+}
+.percent{font:bold 26px Arial;color:#d00649}
+
+.float{
+ position:fixed;bottom:-50px;z-index:4;pointer-events:none;
+ animation:rise 6s linear forwards
+}
+@keyframes rise{
+ to{transform:translateY(-115vh) rotate(360deg);opacity:0}
+}
+.balloon{
+ position:fixed;bottom:-100px;width:45px;height:58px;
+ border-radius:50%;z-index:5;animation:fly 6s ease-in forwards;
+ pointer-events:none
+}
+.balloon:before{
+ content:"";position:absolute;left:50%;top:55px;
+ height:65px;width:1px;background:#a66
+}
+@keyframes fly{
+ to{transform:translateY(-120vh) translateX(35px);opacity:.2}
+}
+
+#heartJoined{font-size:100px;animation:appear .7s}
+.gift{font-size:100px;animation:bob 1.8s infinite}
+@keyframes bob{
+ 50%{transform:translateY(-10px) rotate(4deg)}
+}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:10}
+
+/* Animated 10-second countdown */
+#countdownScreen{
+ position:fixed;inset:0;z-index:1000;
+ display:flex;align-items:center;justify-content:center;
+ padding:24px;
+ background:radial-gradient(circle at top,#fff7fb 0%,#ffd8e6 48%,#f7a7c2 100%);
+ overflow:hidden;transition:opacity .8s ease,visibility .8s ease
+}
+#countdownScreen.hide{
+ opacity:0;visibility:hidden;pointer-events:none
+}
+.clock-card{
+ width:min(520px,100%);padding:32px 22px;
+ border:1px solid #fff;border-radius:30px;
+ background:#ffffffd9;box-shadow:0 25px 80px #a3264b30;
+ position:relative;z-index:2
+}
+.clock-ring{
+ width:300px;height:160px;margin:22px auto;
+ border:7px solid #f5a3bd;border-radius:4%;
+ display:flex;align-items:center;justify-content:center;
+ background:linear-gradient(145deg,#fff,#ffe5ee);
+ box-shadow:inset 0 0 0 7px #fff,0 0 35px #e6004530;
+ animation:clockGlow 2s ease-in-out infinite
+}
+.clock-time{
+ font:bold clamp(38px,10vw,54px) Arial,sans-serif;
+ color:#c90043;font-variant-numeric:tabular-nums
+}
+.clock-label{
+ font:11px Arial,sans-serif;letter-spacing:3px;
+ text-transform:uppercase;color:#a04b68;margin-top:7px
+}
+.clock-hand{
+ height:35px;width:px;background:#d70c4a;border-radius:4px;
+ position:absolute;top:33px;left:calc(50% - 2px);
+ transform-origin:bottom center;animation:tick 10s linear infinite
+}
+.clock-face{
+ position:relative;width:100%;height:100%;
+ display:flex;align-items:center;justify-content:center
+}
+.clock-heart{font-size:30px;animation:beat 1s infinite;margin-top:5px}
+#clockMessage{min-height:28px}
+@keyframes clockGlow{
+ 50%{box-shadow:inset 0 0 0 7px #fff,0 0 48px #e6004550;transform:scale(1.025)}
+}
+@keyframes tick{to{transform:rotate(360deg)}}
+
+.intro-heart{
+ position:absolute;bottom:-40px;pointer-events:none;
+ animation:introRise 5s linear forwards;z-index:1
+}
+@keyframes introRise{
+ to{transform:translateY(-115vh) rotate(360deg);opacity:0}
+}
+.small{font:12px Arial;color:#a04b68}
+
+/* PAGE 7: FOUR PHOTO GALLERY - 2 ABOVE, 2 BELOW */
+.gallery-grid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:14px;margin-top:22px
+}
+.photo-card{
+ overflow:hidden;border-radius:20px;background:#fff;padding:50px;
+ border:1px solid #ffc2d2;box-shadow:0 12px 30px #a3264b18;
+ transition:transform .3s,box-shadow .3s;min-width:0 
+}
+.photo-card:hover{
+ transform:translateY(-7px) rotate(-1deg);
+ box-shadow:0 18px 35px #a3264b30
+}
+.photo-card img{
+ width:100%;height:190px;object-fit:cover;
+ border-radius:14px;display:block
+}
+.photo-card p{font-size:14px;margin:10px 41px 4px}
+.gallery-note{font:12px Arial;color:#a04b68;margin-top:18px}
+
+@media(max-width:480px){
+ .card{padding:17px}
+ .gallery-grid{gap:9px}
+ .photo-card{padding:5px}
+ .photo-card img{height:145px}
+ .photo-card p{font-size:12px}
+ .clock-ring{width:250px;height:150px}
+ .nav button{padding:8px 9px;font-size:10px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- COUNTDOWN INTRO -->
+<div id="countdownScreen" role="dialog" aria-label="Birthday countdown">
+ <div class="clock-card">
+  <div class="eyebrow">A little magic begins at midnight</div>
+  <h1 style="font-size:clamp(30px,7vw,48px)">A Moment For You</h1>
+  <p class="script">The birthday surprise is waiting...</p>
+
+  <div class="clock-ring">
+   <div class="clock-face">
+    <div class="clock-hand"></div>
+    <div>
+     <div class="clock-time" id="countdownTime">00:00:10</div>
+     <div class="clock-label">Until the surprise</div>
+     <div class="clock-heart">💗</div>
+    </div>
+   </div>
+  </div>
+
+  <p id="clockMessage" class="script">HAPPY BIRTHDAY HAYA ✨</p>
+  <p class="small">Made especially for you with love ♡</p>
+ </div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<!-- PAGE 1: WELCOME -->
+<section class="page active" id="p1">
+ <div class="wrap">
+  <div class="eyebrow">A little universe made for you</div>
+  <div class="heart">❤️</div>
+  <h1>Happy Birthday,<br>
+   <span id="heroName" class="script">Beautiful Soul</span>
+  </h1>
+  <p>Today the world became brighter because someone as lovely as you was born. 🌹</p>
+  <div class="card">
+   <p class="script">A little surprise is waiting on every page...</p>
+   <button class="btn" onclick="go(2)">Open Your Surprise ✨</button>
+  </div>
+  <p>Made with love ♡</p>
+ </div>
+</section>
+
+<!-- PAGE 2: DATE OF BIRTH -->
+<section class="page" id="p2">
+ <div class="wrap">
+  <div class="eyebrow">First, a little secret</div>
+  <h2>Unlock the Heart 🔐</h2>
+  <p>Enter your birthday and name to begin the magic.</p>
+  <div class="card">
+   <div class="heart" style="font-size:75px">💗</div>
+   <label for="dob">Your date of birth</label>
+   <input type="date" id="dob">
+   <label for="name">Your beautiful name</label>
+   <input type="text" id="name" maxlength="28" placeholder="Enter your name">
+   <button class="btn" onclick="unlock()">Unlock My Surprise ❤️</button>
+   <p id="error" class="small"></p>
+  </div>
+ </div>
+</section>
+
+<!-- PAGE 3: BATTERY -->
+<section class="page" id="p3">
+ <div class="wrap">
+  <div class="eyebrow">Heart battery: love edition</div>
+  <h2>Charging My Heart For You</h2>
+  <p>Every heartbeat has a wish for your happiness. ❤️</p>
+  <div class="card">
+   <div class="battery">
+    <div class="fill" id="fill">♥</div>
+   </div>
+   <div class="percent" id="percent">0%</div>
+   <p id="chargeText" class="script">Ready for a little magic?</p>
+   <button class="btn" id="chargeBtn" onclick="charge()">Start Charging 💘</button>
+  </div>
+ </div>
+</section>
+
+<!-- PAGE 4: HEART MAGIC -->
+<section class="page" id="p4">
+ <div class="wrap">
+  <div class="eyebrow">A heart can always heal</div>
+  <h2>Two Halves, One Smile</h2>
+  <p>Tap the button and watch the heart magic.</p>
+  <div class="card">
+   <div id="heartStage" style="font-size:100px">💔</div>
+   <p id="heartText" class="script">You deserve a heart full of happiness.</p>
+   <button class="btn" onclick="mendHeart()">Join The Heart ❤️</button>
+  </div>
+ </div>
+</section>
+
+<!-- PAGE 5: BALLOONS -->
+<section class="page" id="p5">
+ <div class="wrap">
+  <div class="eyebrow">A sky full of wishes</div>
+  <h2>Make A Wish, Birthday Girl 🎈</h2>
+  <p>May your dreams rise as high as these balloons.</p>
+  <div class="card">
+   <div style="font-size:65px">🎂 ✨ 🌸</div>
+   <button class="btn" onclick="launchBalloons()">Release The Balloons 🎈</button>
+   <p id="balloonText" class="script"></p>
+  </div>
+ </div>
+</section>
+
+<!-- PAGE 6: FINAL GIFT -->
+<section class="page" id="p6">
+ <div class="wrap">
+  <div class="eyebrow">One last little gift</div>
+  <h2>A Wish From The Heart 💌</h2>
+  <div class="card">
+   <div class="gift" id="gift">🎁</div>
+   <p class="script">There is a special wish inside this gift...</p>
+   <button class="btn" onclick="openGift()">Open Your Gift ✨</button>
+
+   <div id="finalWish" hidden>
+    <p><b>Happy Birthday, <span id="wishName">Beautiful Soul</span>! 🎂❤️</b></p>
+    <p>
+     May Allah bless you with peace, good health, success and endless
+     reasons to smile. May every beautiful dua of your heart come true,
+     and may you always be surrounded by kindness and happiness. Ameen. 🤲🌹
+    </p>
+    <p class="script">Keep shining, keep smiling, and never forget how special you are. 💖</p>
+    <button class="btn" onclick="go(1)">Replay Surprise ↻</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- PAGE 7: FOUR PHOTOS -->
+<section class="page" id="p7">
+ <div class="wrap">
+  <div class="eyebrow">Four little memories</div>
+  <h2>Beautiful Moments 📸</h2>
+  <p>A tiny gallery filled with pretty pictures and birthday vibes. 💗</p>
+
+  <div class="card">
+   <div class="gallery-grid">
+
+    <!-- PHOTO 1: Replace this image URL with your own -->
+    <div class="photo-card">
+     <img
+      src="2.jpg"      alt="Pink flowers"
+      loading="lazy">
+     <p>Pretty flowers 🌸</p>
+    </div>
+
+    <!-- PHOTO 2: Replace this image URL with your own -->
+    <div class="photo-card">
+     <img
+      src="33.jpg"
+      alt="Birthday celebration"
+      loading="lazy">
+     <p>Birthday magic 🎉</p>
+    </div>
+
+    <!-- PHOTO 3: Replace this image URL with your own -->
+    <div class="photo-card">
+     <img
+      src="5.jpg"
+      alt="Beautiful memory"
+      loading="lazy">
+     <p>A lovely memory 💕</p>
+    </div>
+
+    <!-- PHOTO 4: Replace this image URL with your own -->
+    <div class="photo-card">
+     <img
+      src="55.jpg"
+      alt="Friends together"
+      loading="lazy">
+     <p>Smiles together 😊</p>
+    </div>
+
+   </div>
+
+   <p class="gallery-note">
+    Apni pictures lagane ke liye har img ke src="..." ko apni photo ke path se replace karein.
+   </p>
+  </div>
+ </div>
+</section>
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="nav">
+ <button class="active" data-n="1" onclick="go(1)">♡ Start</button>
+ <button data-n="2" onclick="go(2)">🔐 DOB</button>
+ <button data-n="3" onclick="go(3)">🔋 Heart</button>
+ <button data-n="4" onclick="go(4)">💔 Magic</button>
+ <button data-n="5" onclick="go(5)">🎈 Wishes</button>
+ <button data-n="6" onclick="go(6)">🎁 Gift</button>
+ <button data-n="7" onclick="go(7)">📸 Photos</button>
+</nav>
+
+<script>
+let chargeTimer=null, joined=false, opened=false;
+
+/* 10-second animated clock intro */
+let countdownSeconds=10;
+const countdownTime=document.getElementById('countdownTime');
+const countdownScreen=document.getElementById('countdownScreen');
+const clockMessage=document.getElementById('clockMessage');
+
+function formatCountdown(seconds){
+ const mm=String(Math.floor(seconds/60)).padStart(2,'0');
+ const ss=String(seconds%60).padStart(2,'0');
+ return `00:${mm}:${ss}`;
+}
+
+function introHeart(){
+ const heart=document.createElement('span');
+ heart.className='intro-heart';
+ heart.textContent=['💗','💕','♥','♡','✨'][Math.floor(Math.random()*5)];
+ heart.style.left=Math.random()*100+'vw';
+ heart.style.fontSize=(16+Math.random()*24)+'px';
+ heart.style.color=['#e60045','#ff6f9d','#d8a13a'][Math.floor(Math.random()*3)];
+ document.body.appendChild(heart);
+ setTimeout(()=>heart.remove(),5200);
+}
+
+const introHeartTimer=setInterval(()=>{
+ if(!countdownScreen.classList.contains('hide')) introHeart();
+ else clearInterval(introHeartTimer);
+},180);
+
+const countdownTimer=setInterval(()=>{
+ countdownSeconds--;
+ countdownTime.textContent=formatCountdown(Math.max(0,countdownSeconds));
+
+ if(countdownSeconds===5){
+  clockMessage.textContent='Five seconds until your little surprise 💖';
+ }
+
+ if(countdownSeconds===3){
+  clockMessage.textContent='A heartful of wishes is coming... 🌹';
+ }
+
+ if(countdownSeconds<=0){
+  clearInterval(countdownTimer);
+  countdownTime.textContent='00:00:00';
+  clockMessage.textContent='Happy Birthday! Let the magic begin! 🎂❤️';
+
+  setTimeout(()=>{
+   countdownScreen.classList.add('hide');
+   setTimeout(()=>countdownScreen.remove(),900);
+   confettiBurst(90);
+   spawnBalloons(14);
+  },700);
+ }
+},1000);
+
+/* Switch between pages */
+function go(n){
+ document.querySelectorAll('.page').forEach(p=>{
+  p.classList.remove('active');
+ });
+
+ const target=document.getElementById('p'+n);
+ if(!target)return;
+
+ target.classList.add('active');
+
+ document.querySelectorAll('.nav button').forEach(b=>{
+  b.classList.toggle('active',Number(b.dataset.n)===n);
+ });
+
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* Birthday and name unlock */
+function unlock(){
+ const d=document.getElementById('dob').value;
+ const nm=document.getElementById('name').value.trim();
+ const err=document.getElementById('error');
+
+ if(!d){
+  err.textContent='Please enter your date of birth ❤️';
+  return;
+ }
+
+ if(new Date(d+'T00:00:00')>new Date()){
+  err.textContent='Please enter a valid date of birth.';
+  return;
+ }
+
+ err.textContent='';
+
+ const person=nm||'Beautiful Soul';
+ document.getElementById('heroName').textContent=person;
+ document.getElementById('wishName').textContent=person;
+
+ go(3);
+}
+
+/* Red battery fills from bottom to top */
+function charge(){
+ if(chargeTimer)clearInterval(chargeTimer);
+
+ let n=0;
+ const fill=document.getElementById('fill');
+ const pct=document.getElementById('percent');
+ const txt=document.getElementById('chargeText');
+ const btn=document.getElementById('chargeBtn');
+
+ fill.style.height='0%';
+ pct.textContent='0%';
+ btn.disabled=true;
+ btn.textContent='Charging... 💗';
+ txt.textContent='A little love is on its way...';
+
+ chargeTimer=setInterval(()=>{
+  n++;
+  fill.style.height=n+'%';
+  pct.textContent=n+'%';
+
+  if(n===25)txt.textContent='Your smile makes the world sweeter 🌸';
+  if(n===50)txt.textContent='Sending you a thousand happy thoughts 💕';
+  if(n===75)txt.textContent='Almost full of love and wishes...';
+
+  if(n>=100){
+   clearInterval(chargeTimer);
+   chargeTimer=null;
+
+   txt.textContent='100% LOVE! You deserve all the happiness in the world! ❤️';
+   btn.disabled=false;
+   btn.textContent='Next Surprise →';
+   btn.onclick=()=>go(4);
+
+   confettiBurst(100);
+  }
+ },35);
+}
+
+/* Broken heart joins into a full heart */
+function mendHeart(){
+ const stage=document.getElementById('heartStage');
+
+ if(!joined){
+  stage.id='heartJoined';
+  stage.textContent='❤️';
+
+  document.getElementById('heartText').textContent=
+   'May your heart always be full of love, peace and happiness. 💖';
+
+  joined=true;
+  confettiBurst(70);
+  spawnBalloons(10);
+ }else{
+  stage.id='heartStage';
+  stage.textContent='💔';
+
+  document.getElementById('heartText').textContent=
+   'Tap again to bring a little magic back.';
+
+  joined=false;
+ }
+}
+
+/* Birthday balloons */
+function launchBalloons(){
+ spawnBalloons(32);
+
+ document.getElementById('balloonText').textContent=
+  'May your year be filled with laughter, beautiful surprises and dreams coming true! 🎉❤️';
+
+ confettiBurst(100);
+}
+
+function spawnBalloons(count){
+ const colors=['#ff3e76','#ff8db0','#b44bce','#ffca55','#ff6680','#e90049'];
+
+ for(let i=0;i<count;i++){
+  setTimeout(()=>{
+   const b=document.createElement('div');
+   b.className='balloon';
+   b.style.left=Math.random()*95+'vw';
+   b.style.background=colors[Math.floor(Math.random()*colors.length)];
+   b.style.animationDuration=(4+Math.random()*4)+'s';
+
+   document.body.appendChild(b);
+   setTimeout(()=>b.remove(),8500);
+  },i*80);
+ }
+}
+
+/* Open the final birthday gift */
+function openGift(){
+ if(opened)return;
+
+ opened=true;
+ document.getElementById('gift').textContent='💝';
+ document.getElementById('finalWish').hidden=false;
+
+ confettiBurst(180);
+ spawnBalloons(18);
+}
+
+/* Floating hearts and sparkles */
+function floaty(){
+ const el=document.createElement('div');
+ el.className='float';
+
+ el.textContent=['♥','♡','✨','🌸','💕'][Math.floor(Math.random()*5)];
+ el.style.left=Math.random()*100+'vw';
+ el.style.fontSize=(14+Math.random()*20)+'px';
+ el.style.color=['#f0064f','#f5a2bb','#d8a13a'][Math.floor(Math.random()*3)];
+ el.style.animationDuration=(5+Math.random()*6)+'s';
+
+ document.body.appendChild(el);
+ setTimeout(()=>el.remove(),12000);
+}
+
+setInterval(floaty,850);
+
+/* Confetti animation */
+const canvas=document.getElementById('confetti');
+const ctx=canvas.getContext('2d');
+let pieces=[],raf=null;
+
+function resize(){
+ canvas.width=innerWidth;
+ canvas.height=innerHeight;
+}
+
+addEventListener('resize',resize);
+resize();
+
+function confettiBurst(count){
+ for(let i=0;i<count;i++){
+  pieces.push({
+   x:Math.random()*innerWidth,
+   y:-20-Math.random()*innerHeight*.3,
+   vx:(Math.random()-.5)*5,
+   vy:2+Math.random()*5,
+   size:3+Math.random()*5,
+   life:150,
+   color:['#ed145b','#ff9dbb','#ffd166','#fff','#a53b73'][Math.floor(Math.random()*5)]
+  });
+ }
+
+ if(!raf)drawConfetti();
+}
+
+function drawConfetti(){
+ ctx.clearRect(0,0,innerWidth,innerHeight);
+
+ pieces=pieces.filter(p=>p.life-->0&&p.y<innerHeight+30);
+
+ pieces.forEach(p=>{
+  p.x+=p.vx;
+  p.y+=p.vy;
+  p.vy+=.02;
+
+  ctx.fillStyle=p.color;
+  ctx.fillRect(p.x,p.y,p.size,p.size*1.7);
+ });
+
+ if(pieces.length){
+  raf=requestAnimationFrame(drawConfetti);
+ }else{
+  cancelAnimationFrame(raf);
+  raf=null;
+  ctx.clearRect(0,0,innerWidth,innerHeight);
+ }
+}
+</script>
+
+</body>
+</html>
